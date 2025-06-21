@@ -7,122 +7,36 @@ class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key, required this.userRole}) : super(key: key);
 
   List<Widget> _getMenuItems(BuildContext context) {
-    List<Widget> menuItems = [];
-
+    // Helper function to build menu items based on user role
     switch (userRole) {
       case 'Admin':
-        menuItems.addAll([
-          _buildMenuItem(
-            context,
-            icon: Icons.dashboard_outlined,
-            title: 'Dashboard',
-            onTap: () => Navigator.pop(context),
-          ),
-          ExpansionTile(
-            leading: const Icon(Icons.people_alt_outlined),
-            title: const Text('User Management'),
-            children: [
-              _buildSubMenuItem(
-                context,
-                icon: Icons.school_outlined,
-                title: 'Students',
-                onTap: () {},
-              ),
-              _buildSubMenuItem(
-                context,
-                icon: Icons.person_outline,
-                title: 'Teachers',
-                onTap: () {},
-              ),
-            ],
-          ),
-          _buildMenuItem(
-            context,
-            icon: Icons.assignment_outlined,
-            title: 'Attendance',
-            onTap: () {},
-          ),
-          _buildMenuItem(
-            context,
-            icon: Icons.book_outlined,
-            title: 'Homework',
-            onTap: () {},
-          ),
-          const Divider(),
-          _buildMenuItem(
-            context,
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-            onTap: () {},
-          ),
-        ]);
-        break;
+        return [
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true, () => Navigator.pop(context)),
+          _buildExpansionTile(context, 'User Management', Icons.people_alt_outlined, [
+            _buildSubMenuItem(context, 'Students', () {}),
+            _buildSubMenuItem(context, 'Teachers', () {}),
+          ]),
+          _buildMenuItem(context, 'Attendance', Icons.assignment_turned_in_outlined, false, () {}),
+          _buildMenuItem(context, 'Homework', Icons.book_outlined, false, () {}),
+          _buildMenuItem(context, 'Notice Board', Icons.notifications_outlined, false, () {}),
+        ];
       case 'Teacher':
-        menuItems.addAll([
-          _buildMenuItem(
-            context,
-            icon: Icons.dashboard_outlined,
-            title: 'Dashboard',
-            onTap: () => Navigator.pop(context),
-          ),
-          _buildMenuItem(
-            context,
-            icon: Icons.camera_alt_outlined,
-            title: 'Mark Attendance',
-            onTap: () {},
-          ),
-          _buildMenuItem(
-            context,
-            // CORRECTED: Changed from class__outlined to class_outlined
-            icon: Icons.class_outlined,
-            title: 'My Classes',
-            onTap: () {},
-          ),
-          _buildMenuItem(
-            context,
-            icon: Icons.bar_chart_outlined,
-            title: 'Student Performance',
-            onTap: () {},
-          ),
-          const Divider(),
-          _buildMenuItem(
-            context,
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-            onTap: () {},
-          ),
-        ]);
-        break;
+        return [
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true, () => Navigator.pop(context)),
+          _buildMenuItem(context, 'Take Attendance', Icons.camera_alt_outlined, false, () {}),
+          _buildMenuItem(context, 'My Classes', Icons.class_outlined, false, () {}),
+          _buildMenuItem(context, 'Student Performance', Icons.bar_chart_outlined, false, () {}),
+        ];
       case 'Student':
-        menuItems.addAll([
-          _buildMenuItem(
-            context,
-            icon: Icons.dashboard_outlined,
-            title: 'Dashboard',
-            onTap: () => Navigator.pop(context),
-          ),
-          _buildMenuItem(
-            context,
-            icon: Icons.check_circle_outline,
-            title: 'My Attendance',
-            onTap: () {},
-          ),
-          _buildMenuItem(
-            context,
-            icon: Icons.bar_chart_outlined,
-            title: 'My Performance',
-            onTap: () {},
-          ),
-          _buildMenuItem(
-            context,
-            icon: Icons.directions_bus_outlined,
-            title: 'Bus Tracking',
-            onTap: () {},
-          ),
-        ]);
-        break;
+         return [
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true, () => Navigator.pop(context)),
+          _buildMenuItem(context, 'My Attendance', Icons.check_circle_outline, false, () {}),
+          _buildMenuItem(context, 'My Performance', Icons.bar_chart_outlined, false, () {}),
+          _buildMenuItem(context, 'Bus Tracking', Icons.directions_bus_outlined, false, () {}),
+        ];
+      default:
+        return [];
     }
-    return menuItems;
   }
 
   @override
@@ -130,78 +44,109 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          UserAccountsDrawerHeader(
-            accountName: Text(
-              'Revanth Rampal',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            accountEmail: Text(
-              '$userRole Account',
-              style: TextStyle(color: Colors.white70),
-            ),
-            currentAccountPicture: const CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100'),
-            ),
+          // Header
+          DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.indigo,
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage('assets/images/user-avatar.png'),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  'Revanth Rampal', // Placeholder Name
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                Text(
+                  userRole,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white.withOpacity(0.8),
+                      ),
+                ),
+              ],
             ),
           ),
+          // Menu Items
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
               children: _getMenuItems(context),
             ),
           ),
-          const Divider(),
+          // Footer / Logout
+          const Divider(height: 1),
           _buildMenuItem(
             context,
-            icon: Icons.logout,
-            title: 'Logout',
-            color: Colors.red,
-            onTap: () {
+            'Logout',
+            Icons.logout,
+            false,
+            () {
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => const LoginScreen()),
-                (Route<dynamic> route) => false,
+                (route) => false,
               );
             },
+            color: Colors.red.shade700,
           ),
-          const SizedBox(height: 10),
         ],
       ),
     );
   }
 
-  Widget _buildMenuItem(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-    Color? color,
-  }) {
-    return ListTile(
-      leading: Icon(icon, color: color ?? Theme.of(context).iconTheme.color),
-      title: Text(title, style: TextStyle(color: color)),
-      onTap: onTap,
+  // Helper widget for a standard menu item
+  Widget _buildMenuItem(BuildContext context, String title, IconData icon, bool isActive, VoidCallback onTap, {Color? color}) {
+    final activeColor = Theme.of(context).primaryColor;
+    final itemColor = isActive ? activeColor : (color ?? Colors.grey.shade700);
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: isActive ? activeColor.withOpacity(0.1) : null,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ListTile(
+        leading: Icon(icon, color: itemColor),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: itemColor,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        onTap: onTap,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
     );
   }
 
-  // CORRECTED: Fixed typo from BuildContext- to BuildContext
-  Widget _buildSubMenuItem(
-    BuildContext context, {
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
+  // Helper widget for a sub-menu item
+  Widget _buildSubMenuItem(BuildContext context, String title, VoidCallback onTap) {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0),
       child: ListTile(
-        leading: Icon(icon, size: 20),
-        title: Text(title),
+        title: Text(title, style: TextStyle(color: Colors.grey.shade600)),
         onTap: onTap,
+        dense: true,
+      ),
+    );
+  }
+
+  // Helper widget for a collapsible menu item
+  Widget _buildExpansionTile(BuildContext context, String title, IconData icon, List<Widget> children) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: ExpansionTile(
+        leading: Icon(icon, color: Colors.grey.shade700),
+        title: Text(title, style: TextStyle(color: Colors.grey.shade700)),
+        children: children,
       ),
     );
   }

@@ -9,8 +9,6 @@ class DashboardScreen extends StatelessWidget {
 
   const DashboardScreen({Key? key, required this.userRole}) : super(key: key);
 
-  // This helper function returns the correct dashboard view widget
-  // based on the user's role.
   Widget _getDashboardView() {
     switch (userRole) {
       case 'Admin':
@@ -20,47 +18,45 @@ class DashboardScreen extends StatelessWidget {
       case 'Student':
         return const StudentDashboardView();
       default:
-        return const Center(
-          child: Text('Error: Unknown user role.'),
-        );
+        return const Center(child: Text('Error: Unknown user role.'));
+    }
+  }
+
+  String _getGreeting() {
+    switch (userRole) {
+      case 'Admin':
+        return 'Admin Dashboard';
+      case 'Teacher':
+        return 'Teacher Dashboard';
+      case 'Student':
+        return 'Welcome, Revanth!'; // Placeholder name
+      default:
+        return 'Dashboard';
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // The AppBar is our "Header" component
       appBar: AppBar(
-        title: Text('$userRole Dashboard'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 1,
-        // The "actions" are the widgets on the right side of the AppBar
+        title: Text(_getGreeting()),
         actions: [
-          // This will be our "Notifications" icon
           IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // Placeholder for showing notifications
-            },
+            icon: const Icon(Icons.notifications_none_rounded),
+            tooltip: 'Notifications',
+            onPressed: () {},
           ),
-          const SizedBox(width: 10),
-          // This will be our "UserProfile" icon
           const Padding(
-            padding: EdgeInsets.only(right: 16.0),
+            padding: EdgeInsets.only(right: 16.0, left: 8.0),
             child: CircleAvatar(
               radius: 18,
-              backgroundImage: NetworkImage(
-                  'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100'),
+              backgroundImage: AssetImage('assets/images/user-avatar.png'), // Placeholder user avatar
             ),
           ),
         ],
       ),
-      // The Drawer is our "Sidebar" component
       drawer: CustomDrawer(userRole: userRole),
-      // The body of the scaffold will hold the main content for each role's dashboard
       body: _getDashboardView(),
-      backgroundColor: Colors.grey[100],
     );
   }
 }
