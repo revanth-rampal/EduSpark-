@@ -65,12 +65,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 40),
 
                     // --- Form Fields ---
-                    // Role Selector Dropdown
+                    // UPDATED: Role Selector Dropdown with enhanced styling
                     DropdownButtonFormField<String>(
                       value: _selectedRole,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person_outline_rounded),
                       ),
+                      // --- Style enhancements for the dropdown menu ---
+                      borderRadius: BorderRadius.circular(12),
+                      dropdownColor: Colors.white,
+                      elevation: 4,
+                      // --- End of style enhancements ---
                       items: _roles.map((role) {
                         return DropdownMenuItem(
                           value: role,
@@ -95,7 +100,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
-                        if (value == null || !RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                        if (value == null ||
+                            !RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
                           return 'Please enter a valid email';
                         }
                         return null;
@@ -111,7 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         prefixIcon: const Icon(Icons.lock_outline_rounded),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                            _obscureText
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
                             color: Colors.grey.shade500,
                           ),
                           onPressed: () {

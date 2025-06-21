@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// This is now a public, reusable StatCard widget.
+// This is a public, reusable StatCard widget.
 class StatCard extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -72,7 +72,7 @@ class StatCard extends StatelessWidget {
   }
 }
 
-// This is now a public, reusable ActionCard widget.
+// This is a public, reusable ActionCard widget.
 class ActionCard extends StatelessWidget {
   final String title;
   final String subtitle;

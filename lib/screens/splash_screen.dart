@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:lottie/lottie.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'login_screen.dart';
 
@@ -18,12 +17,12 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigateToHome();
   }
 
-  // This function handles the navigation after the splash animation.
+  // This function handles the navigation after the splash screen.
   _navigateToHome() async {
-    // A delay to allow the animation to play.
-    await Future.delayed(const Duration(milliseconds: 3500), () {});
+    // A short delay to show the branding.
+    await Future.delayed(const Duration(milliseconds: 3000), () {});
 
-    // Using a PageRouteBuilder for a smooth fade transition.
+    // Using a PageRouteBuilder for a smooth fade transition to the next screen.
     Navigator.pushReplacement(
       context,
       PageRouteBuilder(
@@ -43,37 +42,53 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: SafeArea(
+        // Using a Stack for precise control over alignment.
+        child: Stack(
           children: [
-            // Using the Lottie animation file.
-            Lottie.asset(
-              'assets/images/loading_animation.json',
-              width: 200,
-              height: 200,
+            // Align the main content to the absolute center of the screen.
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize
+                    .min, // Ensure the column only takes up needed space
+                children: [
+                  Image.asset(
+                    'assets/images/logo.png',
+                    width: 120, // UPDATED: Increased logo size
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'St Joseph School',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: const Color(
+                              0xFF0D47A1), // UPDATED: New color for school name
+                        ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Sursum Corda',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Colors.black54, // UPDATED: New color for motto
+                          fontStyle: FontStyle.italic,
+                        ),
+                  ),
+                ],
+              ).animate().fadeIn(duration: 600.ms),
             ),
-            const SizedBox(height: 24),
-            // Animating the text for a more dynamic feel.
-            Text(
-              'Delhi Public School',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            )
-                .animate()
-                .fadeIn(delay: 500.ms, duration: 500.ms)
-                .slideY(begin: 0.2, end: 0),
-            const SizedBox(height: 8),
-            Text(
-              'Service before Self',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.grey[600],
-                  ),
-            )
-                .animate()
-                .fadeIn(delay: 700.ms, duration: 500.ms)
-                .slideY(begin: 0.2, end: 0),
+
+            // Align the software provider logo to the bottom center of the screen.
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 32.0),
+                child: Image.asset(
+                  'assets/images/EduSpark.png',
+                  height: 50, // UPDATED: Increased logo size
+                ),
+              ).animate().fadeIn(delay: 500.ms),
+            ),
           ],
         ),
       ),

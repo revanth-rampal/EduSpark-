@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
-// Note: In a larger application, the _StatCard and _ActionCard widgets below
-// would be moved to a shared 'widgets' folder to avoid code repetition.
-// For this rebuild, we are keeping them here for simplicity.
+import 'shared/dashboard_widgets.dart'; // Import the new shared widgets file
 
 class AdminDashboardView extends StatelessWidget {
   const AdminDashboardView({Key? key}) : super(key: key);
@@ -11,7 +8,6 @@ class AdminDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Use the subtle background pattern for a professional texture.
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/dashboard-bg.png"),
@@ -21,22 +17,19 @@ class AdminDashboardView extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // Section 1: Overview Title
           const Text(
             "Overview",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-
-          // Section 2: Statistics Grid (from DashboardStats.tsx)
           GridView.count(
             crossAxisCount: 2,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            shrinkWrap: true, // Essential for nesting in a ListView
+            shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: const [
-              _StatCard(
+              StatCard(
                 icon: Icons.people_outline,
                 label: 'Total Students',
                 value: '1,247',
@@ -44,7 +37,7 @@ class AdminDashboardView extends StatelessWidget {
                 changeColor: Colors.green,
                 iconColor: Colors.blue,
               ),
-              _StatCard(
+              StatCard(
                 icon: Icons.check_circle_outline,
                 label: 'Attendance',
                 value: '94.2%',
@@ -52,7 +45,7 @@ class AdminDashboardView extends StatelessWidget {
                 changeColor: Colors.green,
                 iconColor: Colors.green,
               ),
-              _StatCard(
+              StatCard(
                 icon: Icons.star_border,
                 label: 'Avg. Grade',
                 value: '87.3',
@@ -60,7 +53,7 @@ class AdminDashboardView extends StatelessWidget {
                 changeColor: Colors.red,
                 iconColor: Colors.orange,
               ),
-              _StatCard(
+              StatCard(
                 icon: Icons.directions_bus_outlined,
                 label: 'Active Buses',
                 value: '12',
@@ -71,19 +64,17 @@ class AdminDashboardView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-
-          // Section 3: Quick Actions (from QuickActionsSection.tsx)
           const Text(
             "Quick Actions",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          _ActionCard(
+          ActionCard(
             title: "Manage Users",
             subtitle: "Add, edit, or remove users",
             onTap: () {},
           ),
-          _ActionCard(
+          ActionCard(
             title: "Send Notice",
             subtitle: "Broadcast a message to all users",
             onTap: () {},
@@ -92,131 +83,6 @@ class AdminDashboardView extends StatelessWidget {
             .animate(interval: 100.ms)
             .fadeIn(duration: 400.ms)
             .slideY(begin: 0.2, end: 0),
-      ),
-    );
-  }
-}
-
-// A reusable StatCard widget, styled to match the new design.
-class _StatCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final String change;
-  final Color changeColor;
-  final Color iconColor;
-
-  const _StatCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.change,
-    required this.changeColor,
-    required this.iconColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(icon, color: iconColor),
-                ),
-                Text(
-                  change,
-                  style: TextStyle(
-                    color: changeColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  value,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  label,
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// A reusable ActionCard widget, styled for quick actions.
-class _ActionCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  const _ActionCard({
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Image.asset('assets/images/action-icon.png', width: 40),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-            ],
-          ),
-        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../screens/attendance_screen.dart'; // For navigation to the attendance page
-import 'admin_dashboard_view.dart';      // Reusing _StatCard and _ActionCard
+import '../screens/attendance_screen.dart';
+import 'shared/dashboard_widgets.dart'; // Import the new shared widgets file
 
 class TeacherDashboardView extends StatelessWidget {
   const TeacherDashboardView({Key? key}) : super(key: key);
@@ -9,7 +9,6 @@ class TeacherDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Using the same subtle background for consistency.
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/dashboard-bg.png"),
@@ -19,14 +18,11 @@ class TeacherDashboardView extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // Section 1: Title
           const Text(
             "Your Classes",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-
-          // Section 2: Statistics Grid for Teacher
           GridView.count(
             crossAxisCount: 2,
             crossAxisSpacing: 16,
@@ -34,7 +30,7 @@ class TeacherDashboardView extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: const [
-              _StatCard(
+              StatCard(
                 icon: Icons.class_outlined,
                 label: 'Total Classes',
                 value: '4',
@@ -42,7 +38,7 @@ class TeacherDashboardView extends StatelessWidget {
                 changeColor: Colors.grey,
                 iconColor: Colors.blue,
               ),
-              _StatCard(
+              StatCard(
                 icon: Icons.people_outline,
                 label: 'Total Students',
                 value: '156',
@@ -50,7 +46,7 @@ class TeacherDashboardView extends StatelessWidget {
                 changeColor: Colors.grey,
                 iconColor: Colors.green,
               ),
-              _StatCard(
+              StatCard(
                 icon: Icons.assignment_late_outlined,
                 label: 'Ungraded',
                 value: '12',
@@ -58,7 +54,7 @@ class TeacherDashboardView extends StatelessWidget {
                 changeColor: Colors.orange,
                 iconColor: Colors.orange,
               ),
-              _StatCard(
+              StatCard(
                 icon: Icons.pending_actions_outlined,
                 label: 'Pending',
                 value: '5',
@@ -69,14 +65,12 @@ class TeacherDashboardView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-
-          // Section 3: Quick Actions for Teacher
           const Text(
             "Quick Actions",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          _ActionCard(
+          ActionCard(
             title: "Take Attendance",
             subtitle: "Start a new attendance session",
             onTap: () {
@@ -87,7 +81,7 @@ class TeacherDashboardView extends StatelessWidget {
               );
             },
           ),
-          _ActionCard(
+          ActionCard(
             title: "Post Assignment",
             subtitle: "Create and distribute homework",
             onTap: () {},
