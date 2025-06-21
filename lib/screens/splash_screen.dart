@@ -46,27 +46,34 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeAnimation,
-          child: Column(
-            children: [
-              const Spacer(),
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/EduSpark_Logo.jpg', height: 120),
-                    const SizedBox(height: 24),
-                    Text('EduSpark', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.indigo[800], fontSize: 32)),
-                    const SizedBox(height: 16),
-                    Text('Enlightening Futures', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.indigo[600], fontSize: 18)),
-                  ],
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // UPDATED: Using logo.png as requested
+                Image.asset('assets/images/logo.png', height: 120),
+                const SizedBox(height: 24),
+                // UPDATED: School Name
+                Text(
+                  'Delhi Public School',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        color: Colors.indigo[800],
+                        fontSize: 28,
+                      ),
                 ),
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 30.0),
-                child: Image.asset('assets/images/EduSpark.png', height: 60),
-              ),
-            ],
+                const SizedBox(height: 16),
+                // UPDATED: School Motto
+                Text(
+                  'Service before Self',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Colors.indigo[600],
+                        fontSize: 18,
+                        fontStyle: FontStyle.italic,
+                      ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

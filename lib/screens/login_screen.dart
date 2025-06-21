@@ -57,8 +57,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 80,
                   ),
                   const SizedBox(height: 16),
+                  // UPDATED: Welcome message changed to 'Welcome to DPS'
                   const Text(
-                    'Welcome to EduSpark',
+                    'Welcome to DPS',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 26,
