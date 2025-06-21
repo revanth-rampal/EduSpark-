@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+
+// Note: In a larger application, the _StatCard and _ActionCard widgets below
+// would be moved to a shared 'widgets' folder to avoid code repetition.
+// For this rebuild, we are keeping them here for simplicity.
 
 class AdminDashboardView extends StatelessWidget {
   const AdminDashboardView({Key? key}) : super(key: key);
@@ -6,7 +11,7 @@ class AdminDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Using the subtle background pattern for a professional look
+      // Use the subtle background pattern for a professional texture.
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/dashboard-bg.png"),
@@ -16,19 +21,19 @@ class AdminDashboardView extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // Welcome message is now in the AppBar, so we start with stats
+          // Section 1: Overview Title
           const Text(
             "Overview",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
 
-          // Statistics Grid
+          // Section 2: Statistics Grid (from DashboardStats.tsx)
           GridView.count(
             crossAxisCount: 2,
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            shrinkWrap: true,
+            shrinkWrap: true, // Essential for nesting in a ListView
             physics: const NeverScrollableScrollPhysics(),
             children: const [
               _StatCard(
@@ -67,7 +72,7 @@ class AdminDashboardView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Quick Actions Section
+          // Section 3: Quick Actions (from QuickActionsSection.tsx)
           const Text(
             "Quick Actions",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -76,22 +81,23 @@ class AdminDashboardView extends StatelessWidget {
           _ActionCard(
             title: "Manage Users",
             subtitle: "Add, edit, or remove users",
-            icon: Icons.people_alt_outlined,
             onTap: () {},
           ),
           _ActionCard(
             title: "Send Notice",
             subtitle: "Broadcast a message to all users",
-            icon: Icons.campaign_outlined,
             onTap: () {},
           ),
-        ],
+        ]
+            .animate(interval: 100.ms)
+            .fadeIn(duration: 400.ms)
+            .slideY(begin: 0.2, end: 0),
       ),
     );
   }
 }
 
-// Reusable StatCard widget for the dashboard overview
+// A reusable StatCard widget, styled to match the new design.
 class _StatCard extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -101,14 +107,13 @@ class _StatCard extends StatelessWidget {
   final Color iconColor;
 
   const _StatCard({
-    Key? key,
     required this.icon,
     required this.label,
     required this.value,
     required this.change,
     required this.changeColor,
     required this.iconColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +126,7 @@ class _StatCard extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   padding: const EdgeInsets.all(8),
@@ -162,20 +168,17 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-// Reusable ActionCard widget for quick actions
+// A reusable ActionCard widget, styled for quick actions.
 class _ActionCard extends StatelessWidget {
   final String title;
   final String subtitle;
-  final IconData icon;
   final VoidCallback onTap;
 
   const _ActionCard({
-    Key? key,
     required this.title,
     required this.subtitle,
-    required this.icon,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

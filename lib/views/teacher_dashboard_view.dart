@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../screens/attendance_screen.dart'; // For navigation
-import 'admin_dashboard_view.dart'; // To reuse _StatCard and _ActionCard
+import 'package:flutter_animate/flutter_animate.dart';
+import '../screens/attendance_screen.dart'; // For navigation to the attendance page
+import 'admin_dashboard_view.dart';      // Reusing _StatCard and _ActionCard
 
 class TeacherDashboardView extends StatelessWidget {
   const TeacherDashboardView({Key? key}) : super(key: key);
@@ -8,6 +9,7 @@ class TeacherDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // Using the same subtle background for consistency.
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/dashboard-bg.png"),
@@ -17,13 +19,14 @@ class TeacherDashboardView extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
+          // Section 1: Title
           const Text(
             "Your Classes",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
 
-          // Statistics Grid for the Teacher
+          // Section 2: Statistics Grid for Teacher
           GridView.count(
             crossAxisCount: 2,
             crossAxisSpacing: 16,
@@ -67,7 +70,7 @@ class TeacherDashboardView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Quick Actions Section for the Teacher
+          // Section 3: Quick Actions for Teacher
           const Text(
             "Quick Actions",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -76,7 +79,6 @@ class TeacherDashboardView extends StatelessWidget {
           _ActionCard(
             title: "Take Attendance",
             subtitle: "Start a new attendance session",
-            icon: Icons.camera_alt_outlined,
             onTap: () {
               Navigator.push(
                 context,
@@ -88,10 +90,12 @@ class TeacherDashboardView extends StatelessWidget {
           _ActionCard(
             title: "Post Assignment",
             subtitle: "Create and distribute homework",
-            icon: Icons.assignment_outlined,
             onTap: () {},
           ),
-        ],
+        ]
+            .animate(interval: 100.ms)
+            .fadeIn(duration: 400.ms)
+            .slideY(begin: 0.2, end: 0),
       ),
     );
   }

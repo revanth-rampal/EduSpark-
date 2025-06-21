@@ -6,36 +6,49 @@ class CustomDrawer extends StatelessWidget {
 
   const CustomDrawer({Key? key, required this.userRole}) : super(key: key);
 
+  // This helper function builds the list of menu items based on the user's role.
   List<Widget> _getMenuItems(BuildContext context) {
-    // Helper function to build menu items based on user role
     switch (userRole) {
       case 'Admin':
         return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true, () => Navigator.pop(context)),
-          _buildExpansionTile(context, 'User Management', Icons.people_alt_outlined, [
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true,
+              () => Navigator.pop(context)),
+          _buildExpansionTile(
+              context, 'User Management', Icons.people_alt_outlined, [
             _buildSubMenuItem(context, 'Students', () {}),
             _buildSubMenuItem(context, 'Teachers', () {}),
           ]),
-          _buildMenuItem(context, 'Attendance', Icons.assignment_turned_in_outlined, false, () {}),
-          _buildMenuItem(context, 'Homework', Icons.book_outlined, false, () {}),
-          _buildMenuItem(context, 'Notice Board', Icons.notifications_outlined, false, () {}),
+          _buildMenuItem(context, 'Attendance',
+              Icons.assignment_turned_in_outlined, false, () {}),
+          _buildMenuItem(
+              context, 'Homework', Icons.book_outlined, false, () {}),
+          _buildMenuItem(context, 'Notice Board',
+              Icons.notifications_outlined, false, () {}),
         ];
       case 'Teacher':
         return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true, () => Navigator.pop(context)),
-          _buildMenuItem(context, 'Take Attendance', Icons.camera_alt_outlined, false, () {}),
-          _buildMenuItem(context, 'My Classes', Icons.class_outlined, false, () {}),
-          _buildMenuItem(context, 'Student Performance', Icons.bar_chart_outlined, false, () {}),
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true,
+              () => Navigator.pop(context)),
+          _buildMenuItem(context, 'Take Attendance', Icons.camera_alt_outlined,
+              false, () {}),
+          _buildMenuItem(
+              context, 'My Classes', Icons.class_outlined, false, () {}),
+          _buildMenuItem(context, 'Student Performance',
+              Icons.bar_chart_outlined, false, () {}),
         ];
       case 'Student':
-         return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true, () => Navigator.pop(context)),
-          _buildMenuItem(context, 'My Attendance', Icons.check_circle_outline, false, () {}),
-          _buildMenuItem(context, 'My Performance', Icons.bar_chart_outlined, false, () {}),
-          _buildMenuItem(context, 'Bus Tracking', Icons.directions_bus_outlined, false, () {}),
+        return [
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true,
+              () => Navigator.pop(context)),
+          _buildMenuItem(context, 'My Attendance',
+              Icons.check_circle_outline, false, () {}),
+          _buildMenuItem(context, 'My Performance', Icons.bar_chart_outlined,
+              false, () {}),
+          _buildMenuItem(context, 'Bus Tracking',
+              Icons.directions_bus_outlined, false, () {}),
         ];
       default:
-        return [];
+        return []; // Return an empty list for unknown roles.
     }
   }
 
@@ -44,7 +57,7 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          // Header
+          // Header section for the user profile.
           DrawerHeader(
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
@@ -74,14 +87,16 @@ class CustomDrawer extends StatelessWidget {
               ],
             ),
           ),
-          // Menu Items
+
+          // Scrollable list of menu items.
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
               children: _getMenuItems(context),
             ),
           ),
-          // Footer / Logout
+
+          // Footer section with the logout button.
           const Divider(height: 1),
           _buildMenuItem(
             context,
@@ -91,7 +106,7 @@ class CustomDrawer extends StatelessWidget {
             () {
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => const LoginScreen()),
-                (route) => false,
+                (route) => false, // Clears the navigation history.
               );
             },
             color: Colors.red.shade700,
@@ -101,8 +116,10 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  // Helper widget for a standard menu item
-  Widget _buildMenuItem(BuildContext context, String title, IconData icon, bool isActive, VoidCallback onTap, {Color? color}) {
+  // Helper widget for building a standard menu item with modern styling.
+  Widget _buildMenuItem(BuildContext context, String title, IconData icon,
+      bool isActive, VoidCallback onTap,
+      {Color? color}) {
     final activeColor = Theme.of(context).primaryColor;
     final itemColor = isActive ? activeColor : (color ?? Colors.grey.shade700);
 
@@ -127,8 +144,9 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  // Helper widget for a sub-menu item
-  Widget _buildSubMenuItem(BuildContext context, String title, VoidCallback onTap) {
+  // Helper widget for building a submenu item.
+  Widget _buildSubMenuItem(
+      BuildContext context, String title, VoidCallback onTap) {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0),
       child: ListTile(
@@ -139,14 +157,19 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  // Helper widget for a collapsible menu item
-  Widget _buildExpansionTile(BuildContext context, String title, IconData icon, List<Widget> children) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: ExpansionTile(
-        leading: Icon(icon, color: Colors.grey.shade700),
-        title: Text(title, style: TextStyle(color: Colors.grey.shade700)),
-        children: children,
+  // Helper widget for building a collapsible menu item (ExpansionTile).
+  Widget _buildExpansionTile(
+      BuildContext context, String title, IconData icon, List<Widget> children) {
+    return Theme(
+      // Override the divider color to be transparent.
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: ExpansionTile(
+          leading: Icon(icon, color: Colors.grey.shade700),
+          title: Text(title, style: TextStyle(color: Colors.grey.shade700)),
+          children: children,
+        ),
       ),
     );
   }

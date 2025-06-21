@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'admin_dashboard_view.dart'; // To reuse _StatCard and _ActionCard
+import 'package:flutter_animate/flutter_animate.dart';
+import 'admin_dashboard_view.dart'; // Reusing _StatCard and _ActionCard
 
 class StudentDashboardView extends StatelessWidget {
   const StudentDashboardView({Key? key}) : super(key: key);
@@ -7,6 +8,7 @@ class StudentDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // Using the same subtle background for a consistent look.
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/dashboard-bg.png"),
@@ -16,13 +18,14 @@ class StudentDashboardView extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
+          // Section 1: Title
           const Text(
             "Your Day at a Glance",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
 
-          // Statistics Grid for the Student
+          // Section 2: Statistics Grid for Student
           GridView.count(
             crossAxisCount: 2,
             crossAxisSpacing: 16,
@@ -66,7 +69,7 @@ class StudentDashboardView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Quick Actions Section for the Student
+          // Section 3: Quick Actions for Student
           const Text(
             "What's Next?",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -75,16 +78,17 @@ class StudentDashboardView extends StatelessWidget {
           _ActionCard(
             title: "View Timetable",
             subtitle: "Check your class schedule for today",
-            icon: Icons.schedule_outlined,
             onTap: () {},
           ),
           _ActionCard(
             title: "View Assignments",
             subtitle: "See upcoming homework and due dates",
-            icon: Icons.assignment_outlined,
             onTap: () {},
           ),
-        ],
+        ]
+            .animate(interval: 100.ms)
+            .fadeIn(duration: 400.ms)
+            .slideY(begin: 0.2, end: 0),
       ),
     );
   }
