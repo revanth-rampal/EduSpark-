@@ -1,6 +1,6 @@
 name: eduspark
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: 'none' 
 version: 1.0.0+1
 
 environment:
@@ -17,6 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons: "^0.13.1"
   flutter_lints: ^3.0.0
 
 flutter:
@@ -24,3 +25,8 @@ flutter:
 
   assets:
     - assets/images/
+    
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/EduSpark_Logo.jpg"
