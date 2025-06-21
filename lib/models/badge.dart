@@ -7,7 +7,7 @@ class Badge {
   final String description;
   final bool earned;
   final String awardedBy;
-  final DateTime date;
+  final DateTime? date; // Date can be null for unearned badges
 
   Badge({
     required this.id,
@@ -15,20 +15,19 @@ class Badge {
     required this.image,
     required this.description,
     required this.earned,
-    required this.awardedBy,
-    required this.date,
+    this.awardedBy = 'Locked', // Default value for unearned
+    this.date,
   });
 }
 
-// --- MOCK DATA ---
-// This list translates your React mock data.
+// FIX: Updated the list to include earned and unearned badges
 final allBadges = [
   Badge(
     id: 'll',
     name: 'Legendary Learner',
-    image: 'assets/images/ll.png', // Note the updated path for Flutter
+    image: 'assets/images/ll.png',
     description:
-        'Awarded for demonstrating exceptional curiosity and a deep passion for learning across all subjects. A true role model in the classroom.',
+        'Awarded for demonstrating exceptional curiosity and a deep passion for learning across all subjects.',
     earned: true,
     awardedBy: 'Ms. Davidson',
     date: DateTime.parse('2024-06-15T10:00:00Z'),
@@ -38,7 +37,7 @@ final allBadges = [
     name: 'Comeback Kid',
     image: 'assets/images/ck.png',
     description:
-        'Recognizes outstanding creativity and innovation in project work, thinking outside the box to produce extraordinary results.',
+        'Recognizes outstanding creativity and innovation in project work.',
     earned: true,
     awardedBy: 'Mr. Carter',
     date: DateTime.parse('2024-05-22T14:30:00Z'),
@@ -47,8 +46,7 @@ final allBadges = [
     id: 'som',
     name: 'Star of the Month',
     image: 'assets/images/som.png',
-    description:
-        'Awarded for exemplary behavior, consistent effort, and a positive attitude throughout the entire month.',
+    description: 'Awarded for exemplary behavior and a positive attitude.',
     earned: true,
     awardedBy: 'Principal Adams',
     date: DateTime.parse('2024-04-30T09:00:00Z'),
@@ -57,8 +55,7 @@ final allBadges = [
     id: 'sc',
     name: 'Sports Champion',
     image: 'assets/images/sc.png',
-    description:
-        'Celebrates exceptional skill, sportsmanship, and leadership on the sports field. A true team player.',
+    description: 'Celebrates exceptional skill and sportsmanship on the field.',
     earned: true,
     awardedBy: 'Coach Miller',
     date: DateTime.parse('2024-03-18T16:00:00Z'),
@@ -68,9 +65,26 @@ final allBadges = [
     name: 'Science Wizard',
     image: 'assets/images/sw.png',
     description:
-        'For students who show a remarkable aptitude for scientific inquiry, experimentation, and discovery.',
+        'For students who show a remarkable aptitude for scientific inquiry.',
     earned: true,
     awardedBy: 'Dr. Evelyn Reed',
     date: DateTime.parse('2024-02-10T11:00:00Z'),
+  ),
+  // --- NEW UNEARNED BADGES ---
+  Badge(
+    id: 'pa',
+    name: 'Perfect Attendance',
+    image: 'assets/images/pa.png', // Assuming you have a 'pa.png' image
+    description:
+        'Awarded for not missing a single day of school in a semester.',
+    earned: false,
+  ),
+  Badge(
+    id: 'mystery',
+    name: 'Mystery Badge',
+    image: 'assets/images/mystery.png', // Assuming you have a 'mystery.png'
+    description:
+        'Keep participating in class activities to unlock this secret achievement!',
+    earned: false,
   ),
 ];

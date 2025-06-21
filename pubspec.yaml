@@ -10,7 +10,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # Add any packages from pub.dev here. For the UI we built, you need:
   intl: ^0.19.0
   cupertino_icons: ^1.0.6
 
@@ -20,11 +19,8 @@ dev_dependencies:
 
   flutter_lints: ^3.0.0
 
-# This is the single, corrected 'flutter' section.
-# All flutter-specific configurations go under this one key.
 flutter:
   uses-material-design: true
 
-  # Asset declaration for your images
   assets:
     - assets/images/
