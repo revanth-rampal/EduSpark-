@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'login_screen.dart';
+import 'badges_screen.dart'; // Import the new badges screen
 
-// A simple data model for the child switcher
 class ChildProfile {
   final String name;
   final String avatarAsset;
@@ -18,19 +18,14 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  // Dummy data for the parent's children
   final List<ChildProfile> _children = [
-    ChildProfile(
-        name: "Ananya S.", avatarAsset: "assets/images/user-avatar.png"),
-    ChildProfile(
-        name: "Rohan S.",
-        avatarAsset: "assets/images/logo.png"), // Using logo as a placeholder
+    ChildProfile(name: "Ananya S.", avatarAsset: "assets/images/user-avatar.png"),
+    ChildProfile(name: "Rohan S.", avatarAsset: "assets/images/logo.png"),
   ];
   int _selectedChildIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    // Define colors and text styles for a clean look
     final primaryColor = Theme.of(context).primaryColor;
     final onPrimaryColor = Colors.white;
     final textColor = Colors.grey.shade800;
@@ -38,30 +33,22 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return Drawer(
       elevation: 2,
       child: SafeArea(
-        // UPDATED: Using SafeArea to avoid the system navigation bar at the bottom.
-        top:
-            false, // We set top to false because the header has its own padding.
+        top: false,
         child: Column(
           children: [
-            // --- HEADER ---
             _buildHeader(context, primaryColor, onPrimaryColor),
-
-            // --- MENU ITEMS ---
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 children: [
                   _buildSectionHeader("MENU"),
-                  // Menu items are dynamically built based on the user's role
                   ..._getMenuItemsForRole(context, widget.userRole),
                 ],
               ),
             ),
-
-            // --- FOOTER & CHILD SWITCHER ---
             const Divider(height: 1),
-            // Conditionally show the child switcher only for the 'Parent' role
-            if (widget.userRole == 'Parent') _buildChildSwitcher(),
+            if (widget.userRole == 'Parent')
+              _buildChildSwitcher(),
             _buildFooter(context, textColor),
           ],
         ).animate().fadeIn(duration: 300.ms),
@@ -69,10 +56,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  // --- BUILDER METHODS FOR UI COMPONENTS ---
-
-  Widget _buildHeader(
-      BuildContext context, Color primaryColor, Color onPrimaryColor) {
+  Widget _buildHeader(BuildContext context, Color primaryColor, Color onPrimaryColor) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
       decoration: BoxDecoration(color: primaryColor),
@@ -90,10 +74,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               Text(
                 'Sursum Corda',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: onPrimaryColor.withOpacity(0.8)),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: onPrimaryColor.withOpacity(0.8)),
               ),
             ],
           )
@@ -117,43 +99,35 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   List<Widget> _getMenuItemsForRole(BuildContext context, String role) {
-    // This defines the menu structure for each role
     switch (role) {
       case 'Admin':
         return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true,
-              () => Navigator.pop(context)),
-          _buildMenuItem(context, 'User Management', Icons.people_alt_rounded,
-              false, () {}),
-          _buildMenuItem(context, 'Attendance',
-              Icons.assignment_turned_in_rounded, false, () {}),
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true, () => Navigator.pop(context)),
+          _buildMenuItem(context, 'User Management', Icons.people_alt_rounded, false, () {}),
+          _buildMenuItem(context, 'Attendance', Icons.assignment_turned_in_rounded, false, () {}),
         ];
       case 'Teacher':
         return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true,
-              () => Navigator.pop(context)),
-          _buildMenuItem(context, 'Take Attendance', Icons.camera_alt_rounded,
-              false, () {}),
-          _buildMenuItem(
-              context, 'My Classes', Icons.class_rounded, false, () {}),
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true, () => Navigator.pop(context)),
+          _buildMenuItem(context, 'Take Attendance', Icons.camera_alt_rounded, false, () {}),
+          _buildMenuItem(context, 'My Classes', Icons.class_rounded, false, () {}),
         ];
       case 'Student':
         return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true,
-              () => Navigator.pop(context)),
-          _buildMenuItem(context, 'My Attendance', Icons.check_circle_rounded,
-              false, () {}),
-          _buildMenuItem(
-              context, 'My Performance', Icons.bar_chart_rounded, false, () {}),
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true, () => Navigator.pop(context)),
+          _buildMenuItem(context, 'My Attendance', Icons.check_circle_rounded, false, () {}),
+          // UPDATED: Added the "My Achievements" menu item
+          _buildMenuItem(context, 'My Achievements', Icons.workspace_premium_rounded, false, () {
+            Navigator.pop(context); // Close the drawer first
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const BadgesScreen()));
+          }),
+          _buildMenuItem(context, 'My Performance', Icons.bar_chart_rounded, false, () {}),
         ];
-      case 'Parent': // Special role with the child switcher
+      case 'Parent':
         return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true,
-              () => Navigator.pop(context)),
-          _buildMenuItem(
-              context, 'Attendance', Icons.check_circle_rounded, false, () {}),
-          _buildMenuItem(context, 'Bus Tracking', Icons.directions_bus_rounded,
-              false, () {}),
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true, () => Navigator.pop(context)),
+          _buildMenuItem(context, 'Attendance', Icons.check_circle_rounded, false, () {}),
+          _buildMenuItem(context, 'Bus Tracking', Icons.directions_bus_rounded, false, () {}),
         ];
       default:
         return [];
@@ -167,11 +141,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("VIEWING AS",
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold)),
+          const Text("VIEWING AS", style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
@@ -188,18 +158,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       duration: const Duration(milliseconds: 300),
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? Theme.of(context).primaryColor
-                            : Colors.transparent,
+                        color: isSelected ? Theme.of(context).primaryColor : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        _children[index].name.split(" ")[0], // Show first name
+                        _children[index].name.split(" ")[0],
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color:
-                              isSelected ? Colors.white : Colors.grey.shade700,
+                          color: isSelected ? Colors.white : Colors.grey.shade700,
                         ),
                       ),
                     ),
@@ -220,15 +187,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
         children: [
           CircleAvatar(
             radius: 20,
-            backgroundImage:
-                AssetImage(_children[_selectedChildIndex].avatarAsset),
+            backgroundImage: AssetImage(widget.userRole == 'Parent' ? _children[_selectedChildIndex].avatarAsset : "assets/images/user-avatar.png"),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              widget.userRole == 'Parent'
-                  ? _children[_selectedChildIndex].name
-                  : 'Revanth Rampal',
+              widget.userRole == 'Parent' ? _children[_selectedChildIndex].name : 'Revanth Rampal',
               style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
             ),
           ),
@@ -246,12 +210,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  Widget _buildMenuItem(BuildContext context, String title, IconData icon,
-      bool isActive, VoidCallback onTap) {
+  Widget _buildMenuItem(BuildContext context, String title, IconData icon, bool isActive, VoidCallback onTap) {
     final primaryColor = Theme.of(context).primaryColor;
     return ListTile(
-      leading:
-          Icon(icon, color: isActive ? primaryColor : Colors.grey.shade600),
+      leading: Icon(icon, color: isActive ? primaryColor : Colors.grey.shade600),
       title: Text(
         title,
         style: TextStyle(

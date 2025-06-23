@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserProfileScreen extends StatelessWidget {
+  // No longer needs userRole as badges are not displayed here.
   const UserProfileScreen({Key? key}) : super(key: key);
 
   @override
@@ -10,13 +11,11 @@ class UserProfileScreen extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
-      // Use a custom app bar for a unique design
       appBar: AppBar(
         title: const Text("Student Profile"),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      // Extend the gradient background from the body behind the app bar
       extendBodyBehindAppBar: true,
       body: Container(
         decoration: BoxDecoration(
@@ -29,11 +28,8 @@ class UserProfileScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           children: [
-            // --- Profile Header ---
             _buildProfileHeader(),
             const SizedBox(height: 24),
-
-            // --- Information Cards ---
             _buildInfoCard(
               title: 'Personal Information',
               icon: Icons.person_outline,
@@ -42,6 +38,7 @@ class UserProfileScreen extends StatelessWidget {
                 _buildInfoRow(Icons.bloodtype_outlined, 'Blood Group', 'O+'),
               ],
             ),
+            // The "Achievements & Badges" card has been removed from this screen.
             _buildInfoCard(
               title: 'Address',
               icon: Icons.home_outlined,
@@ -66,12 +63,10 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-  // --- BUILDER WIDGETS ---
-
   Widget _buildProfileHeader() {
     return Column(
       children: [
-        const SizedBox(height: 100), // Space for app bar
+        const SizedBox(height: 100), // Space for the transparent AppBar
         const CircleAvatar(
           radius: 50,
           backgroundImage: AssetImage('assets/images/user-avatar.png'),
@@ -79,10 +74,7 @@ class UserProfileScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           'Revanth Rampal',
-          style: GoogleFonts.poppins(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(

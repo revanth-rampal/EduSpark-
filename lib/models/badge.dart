@@ -1,5 +1,3 @@
-// lib/models/badge.dart
-
 class Badge {
   final String id;
   final String name;
@@ -20,14 +18,13 @@ class Badge {
   });
 }
 
-// FIX: Updated the list to include earned and unearned badges
+// Dummy data for all available badges in the app, as you provided.
 final allBadges = [
   Badge(
     id: 'll',
     name: 'Legendary Learner',
     image: 'assets/images/ll.png',
-    description:
-        'Awarded for demonstrating exceptional curiosity and a deep passion for learning across all subjects.',
+    description: 'Awarded for demonstrating exceptional curiosity and a deep passion for learning across all subjects.',
     earned: true,
     awardedBy: 'Ms. Davidson',
     date: DateTime.parse('2024-06-15T10:00:00Z'),
@@ -36,8 +33,7 @@ final allBadges = [
     id: 'ck',
     name: 'Comeback Kid',
     image: 'assets/images/ck.png',
-    description:
-        'Recognizes outstanding creativity and innovation in project work.',
+    description: 'Recognizes outstanding creativity and innovation in project work.',
     earned: true,
     awardedBy: 'Mr. Carter',
     date: DateTime.parse('2024-05-22T14:30:00Z'),
@@ -64,27 +60,24 @@ final allBadges = [
     id: 'sw',
     name: 'Science Wizard',
     image: 'assets/images/sw.png',
-    description:
-        'For students who show a remarkable aptitude for scientific inquiry.',
+    description: 'For students who show a remarkable aptitude for scientific inquiry.',
     earned: true,
     awardedBy: 'Dr. Evelyn Reed',
     date: DateTime.parse('2024-02-10T11:00:00Z'),
   ),
-  // --- NEW UNEARNED BADGES ---
+  // Unearned Badges
   Badge(
     id: 'pa',
     name: 'Perfect Attendance',
-    image: 'assets/images/pa.png', // Assuming you have a 'pa.png' image
-    description:
-        'Awarded for not missing a single day of school in a semester.',
+    image: 'assets/images/la.png', // Using the locked asset for all unearned
+    description: 'Awarded for not missing a single day of school in a semester.',
     earned: false,
   ),
   Badge(
     id: 'mystery',
     name: 'Mystery Badge',
-    image: 'assets/images/mystery.png', // Assuming you have a 'mystery.png'
-    description:
-        'Keep participating in class activities to unlock this secret achievement!',
+    image: 'assets/images/la.png', // Using the locked asset
+    description: 'Keep participating in class activities to unlock this secret achievement!',
     earned: false,
   ),
 ];

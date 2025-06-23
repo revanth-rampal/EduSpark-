@@ -78,8 +78,7 @@ class ActionCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundColor:
-                    Theme.of(context).primaryColor.withOpacity(0.1),
+                backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
                 child: Icon(icon, color: Theme.of(context).primaryColor),
               ),
               const SizedBox(width: 16),
