@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dashboard_screen.dart';
+import 'onboarding_screen.dart'; // Import the new onboarding screen
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,9 +21,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() {
     if (_formKey.currentState!.validate()) {
+      // UPDATED: Instead of going to the dashboard, we now go to the onboarding screen first.
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => DashboardScreen(userRole: _selectedRole),
+          // Pass the user's role to the onboarding screen so it knows what to do when finished.
+          builder: (context) => OnboardingScreen(userRole: _selectedRole),
         ),
       );
     }
@@ -30,13 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Set status bar icons to dark for better contrast on a light background
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     final primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
       body: Container(
-        // UPDATED: Using a white-to-purple gradient for a light theme.
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -56,14 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // --- Header ---
                     Text(
                       'Welcome Back',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(
                         fontSize: 36,
                         fontWeight: FontWeight.w900,
-                        color: primaryColor, // Use primary color for the title
+                        color: primaryColor,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -75,8 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 40),
-
-                    // --- Clean Form Container ---
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
@@ -174,7 +172,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Helper method for consistent label styling in a light theme
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
@@ -188,7 +185,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Helper method for consistent input field styling in a light theme
   InputDecoration _buildInputDecoration({String? hint}) {
     return InputDecoration(
       hintText: hint,

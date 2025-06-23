@@ -31,6 +31,7 @@ class _CameraScanScreenState extends State<CameraScanScreen> {
     // 1. Request Camera Permission
     final cameraStatus = await Permission.camera.request();
     if (!cameraStatus.isGranted) {
+      if (!mounted) return;
       setState(() {
         _statusMessage = 'Camera Permission Denied';
         _statusColor = Colors.red;
@@ -60,6 +61,7 @@ class _CameraScanScreenState extends State<CameraScanScreen> {
   Future<void> _getCurrentLocation() async {
     final locationStatus = await Permission.location.request();
     if (!locationStatus.isGranted) {
+      if (!mounted) return;
       setState(() {
         _statusMessage = 'Location Permission Denied';
         _statusColor = Colors.red;
@@ -100,7 +102,7 @@ class _CameraScanScreenState extends State<CameraScanScreen> {
       final image = await _controller!.takePicture();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Image captured! Ready for analysis.')),
+        const SnackBar(content: Text('Image captured! Ready for analysis.')),
       );
       
       // Here, you would send the image and location to your backend/ML service.

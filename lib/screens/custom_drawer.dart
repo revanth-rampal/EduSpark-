@@ -1,176 +1,269 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'login_screen.dart';
 
-class CustomDrawer extends StatelessWidget {
-  final String userRole;
+// A simple data model for the child switcher
+class ChildProfile {
+  final String name;
+  final String avatarAsset;
+  ChildProfile({required this.name, required this.avatarAsset});
+}
 
+class CustomDrawer extends StatefulWidget {
+  final String userRole;
   const CustomDrawer({Key? key, required this.userRole}) : super(key: key);
 
-  // This helper function builds the list of menu items based on the user's role.
-  List<Widget> _getMenuItems(BuildContext context) {
-    switch (userRole) {
-      case 'Admin':
-        return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true,
-              () => Navigator.pop(context)),
-          _buildExpansionTile(
-              context, 'User Management', Icons.people_alt_outlined, [
-            _buildSubMenuItem(context, 'Students', () {}),
-            _buildSubMenuItem(context, 'Teachers', () {}),
-          ]),
-          _buildMenuItem(context, 'Attendance',
-              Icons.assignment_turned_in_outlined, false, () {}),
-          _buildMenuItem(
-              context, 'Homework', Icons.book_outlined, false, () {}),
-          _buildMenuItem(context, 'Notice Board',
-              Icons.notifications_outlined, false, () {}),
-        ];
-      case 'Teacher':
-        return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true,
-              () => Navigator.pop(context)),
-          _buildMenuItem(context, 'Take Attendance', Icons.camera_alt_outlined,
-              false, () {}),
-          _buildMenuItem(
-              context, 'My Classes', Icons.class_outlined, false, () {}),
-          _buildMenuItem(context, 'Student Performance',
-              Icons.bar_chart_outlined, false, () {}),
-        ];
-      case 'Student':
-        return [
-          _buildMenuItem(context, 'Dashboard', Icons.dashboard_outlined, true,
-              () => Navigator.pop(context)),
-          _buildMenuItem(context, 'My Attendance',
-              Icons.check_circle_outline, false, () {}),
-          _buildMenuItem(context, 'My Performance', Icons.bar_chart_outlined,
-              false, () {}),
-          _buildMenuItem(context, 'Bus Tracking',
-              Icons.directions_bus_outlined, false, () {}),
-        ];
-      default:
-        return []; // Return an empty list for unknown roles.
-    }
-  }
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  // Dummy data for the parent's children
+  final List<ChildProfile> _children = [
+    ChildProfile(
+        name: "Ananya S.", avatarAsset: "assets/images/user-avatar.png"),
+    ChildProfile(
+        name: "Rohan S.",
+        avatarAsset: "assets/images/logo.png"), // Using logo as a placeholder
+  ];
+  int _selectedChildIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    // Define colors and text styles for a clean look
+    final primaryColor = Theme.of(context).primaryColor;
+    final onPrimaryColor = Colors.white;
+    final textColor = Colors.grey.shade800;
+
     return Drawer(
-      child: Column(
+      elevation: 2,
+      child: SafeArea(
+        // UPDATED: Using SafeArea to avoid the system navigation bar at the bottom.
+        top:
+            false, // We set top to false because the header has its own padding.
+        child: Column(
+          children: [
+            // --- HEADER ---
+            _buildHeader(context, primaryColor, onPrimaryColor),
+
+            // --- MENU ITEMS ---
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                children: [
+                  _buildSectionHeader("MENU"),
+                  // Menu items are dynamically built based on the user's role
+                  ..._getMenuItemsForRole(context, widget.userRole),
+                ],
+              ),
+            ),
+
+            // --- FOOTER & CHILD SWITCHER ---
+            const Divider(height: 1),
+            // Conditionally show the child switcher only for the 'Parent' role
+            if (widget.userRole == 'Parent') _buildChildSwitcher(),
+            _buildFooter(context, textColor),
+          ],
+        ).animate().fadeIn(duration: 300.ms),
+      ),
+    );
+  }
+
+  // --- BUILDER METHODS FOR UI COMPONENTS ---
+
+  Widget _buildHeader(
+      BuildContext context, Color primaryColor, Color onPrimaryColor) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+      decoration: BoxDecoration(color: primaryColor),
+      child: Row(
         children: [
-          // Header section for the user profile.
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const CircleAvatar(
-                  radius: 30,
-                  backgroundImage: AssetImage('assets/images/user-avatar.png'),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Revanth Rampal', // Placeholder Name
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                Text(
-                  userRole,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                ),
-              ],
-            ),
-          ),
-
-          // Scrollable list of menu items.
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: _getMenuItems(context),
-            ),
-          ),
-
-          // Footer section with the logout button.
-          const Divider(height: 1),
-          _buildMenuItem(
-            context,
-            'Logout',
-            Icons.logout,
-            false,
-            () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-                (route) => false, // Clears the navigation history.
-              );
-            },
-            color: Colors.red.shade700,
-          ),
+          Image.asset('assets/images/logo.png', height: 40),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'St Joseph School',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: onPrimaryColor, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                'Sursum Corda',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: onPrimaryColor.withOpacity(0.8)),
+              ),
+            ],
+          )
         ],
       ),
     );
   }
 
-  // Helper widget for building a standard menu item with modern styling.
-  Widget _buildMenuItem(BuildContext context, String title, IconData icon,
-      bool isActive, VoidCallback onTap,
-      {Color? color}) {
-    final activeColor = Theme.of(context).primaryColor;
-    final itemColor = isActive ? activeColor : (color ?? Colors.grey.shade700);
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: isActive ? activeColor.withOpacity(0.1) : null,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: ListTile(
-        leading: Icon(icon, color: itemColor),
-        title: Text(
-          title,
-          style: TextStyle(
-            color: itemColor,
-            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-        onTap: onTap,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-    );
-  }
-
-  // Helper widget for building a submenu item.
-  Widget _buildSubMenuItem(
-      BuildContext context, String title, VoidCallback onTap) {
+  Widget _buildSectionHeader(String title) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0),
-      child: ListTile(
-        title: Text(title, style: TextStyle(color: Colors.grey.shade600)),
-        onTap: onTap,
-        dense: true,
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: Colors.grey.shade500,
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        ),
       ),
     );
   }
 
-  // Helper widget for building a collapsible menu item (ExpansionTile).
-  Widget _buildExpansionTile(
-      BuildContext context, String title, IconData icon, List<Widget> children) {
-    return Theme(
-      // Override the divider color to be transparent.
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: ExpansionTile(
-          leading: Icon(icon, color: Colors.grey.shade700),
-          title: Text(title, style: TextStyle(color: Colors.grey.shade700)),
-          children: children,
+  List<Widget> _getMenuItemsForRole(BuildContext context, String role) {
+    // This defines the menu structure for each role
+    switch (role) {
+      case 'Admin':
+        return [
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true,
+              () => Navigator.pop(context)),
+          _buildMenuItem(context, 'User Management', Icons.people_alt_rounded,
+              false, () {}),
+          _buildMenuItem(context, 'Attendance',
+              Icons.assignment_turned_in_rounded, false, () {}),
+        ];
+      case 'Teacher':
+        return [
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true,
+              () => Navigator.pop(context)),
+          _buildMenuItem(context, 'Take Attendance', Icons.camera_alt_rounded,
+              false, () {}),
+          _buildMenuItem(
+              context, 'My Classes', Icons.class_rounded, false, () {}),
+        ];
+      case 'Student':
+        return [
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true,
+              () => Navigator.pop(context)),
+          _buildMenuItem(context, 'My Attendance', Icons.check_circle_rounded,
+              false, () {}),
+          _buildMenuItem(
+              context, 'My Performance', Icons.bar_chart_rounded, false, () {}),
+        ];
+      case 'Parent': // Special role with the child switcher
+        return [
+          _buildMenuItem(context, 'Dashboard', Icons.dashboard_rounded, true,
+              () => Navigator.pop(context)),
+          _buildMenuItem(
+              context, 'Attendance', Icons.check_circle_rounded, false, () {}),
+          _buildMenuItem(context, 'Bus Tracking', Icons.directions_bus_rounded,
+              false, () {}),
+        ];
+      default:
+        return [];
+    }
+  }
+
+  Widget _buildChildSwitcher() {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      color: Colors.grey.shade100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("VIEWING AS",
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: List.generate(_children.length, (index) {
+                final isSelected = _selectedChildIndex == index;
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => _selectedChildIndex = index),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? Theme.of(context).primaryColor
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        _children[index].name.split(" ")[0], // Show first name
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color:
+                              isSelected ? Colors.white : Colors.grey.shade700,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFooter(BuildContext context, Color textColor) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundImage:
+                AssetImage(_children[_selectedChildIndex].avatarAsset),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              widget.userRole == 'Parent'
+                  ? _children[_selectedChildIndex].name
+                  : 'Revanth Rampal',
+              style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.logout_rounded, color: Colors.red.shade400),
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                (route) => false,
+              );
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuItem(BuildContext context, String title, IconData icon,
+      bool isActive, VoidCallback onTap) {
+    final primaryColor = Theme.of(context).primaryColor;
+    return ListTile(
+      leading:
+          Icon(icon, color: isActive ? primaryColor : Colors.grey.shade600),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: isActive ? primaryColor : Colors.grey.shade800,
+          fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
         ),
       ),
+      onTap: onTap,
+      selected: isActive,
+      selectedTileColor: primaryColor.withOpacity(0.1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
     );
   }
 }

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// This is a public, reusable StatCard widget.
+// A reusable, premium-styled card for displaying statistics.
 class StatCard extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
-  final String change;
-  final Color changeColor;
   final Color iconColor;
 
   const StatCard({
@@ -14,8 +13,6 @@ class StatCard extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.value,
-    required this.change,
-    required this.changeColor,
     required this.iconColor,
   }) : super(key: key);
 
@@ -26,44 +23,25 @@ class StatCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(icon, color: iconColor),
-                ),
-                Text(
-                  change,
-                  style: TextStyle(
-                    color: changeColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            CircleAvatar(
+              radius: 22,
+              backgroundColor: iconColor.withOpacity(0.1),
+              child: Icon(icon, color: iconColor, size: 24),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  value,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  label,
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-              ],
+            const Spacer(),
+            Text(
+              value,
+              style: GoogleFonts.poppins(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(color: Colors.grey.shade600),
             ),
           ],
         ),
@@ -72,16 +50,18 @@ class StatCard extends StatelessWidget {
   }
 }
 
-// This is a public, reusable ActionCard widget.
+// A reusable, premium-styled card for quick actions.
 class ActionCard extends StatelessWidget {
   final String title;
   final String subtitle;
+  final IconData icon;
   final VoidCallback onTap;
 
   const ActionCard({
     Key? key,
     required this.title,
     required this.subtitle,
+    required this.icon,
     required this.onTap,
   }) : super(key: key);
 
@@ -96,7 +76,12 @@ class ActionCard extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              Image.asset('assets/images/action-icon.png', width: 40),
+              CircleAvatar(
+                radius: 24,
+                backgroundColor:
+                    Theme.of(context).primaryColor.withOpacity(0.1),
+                child: Icon(icon, color: Theme.of(context).primaryColor),
+              ),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
