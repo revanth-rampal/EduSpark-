@@ -26,18 +26,21 @@ class BadgeDetailDialog extends StatelessWidget {
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
-            // Badge Image
-            Image.asset(
-              badge.image,
-              height: 100,
-              // Apply a grayscale filter if the badge is not earned
-              color: badge.earned ? null : Colors.grey.shade400,
-              colorBlendMode: badge.earned ? null : BlendMode.saturation,
-            ),
+            // Larger, floating badge image
+            Image.asset(badge.image, height: 120)
+                .animate(onPlay: (controller) => controller.repeat())
+                .moveY(
+                  begin: -5,
+                  end: 5,
+                  duration: 2.seconds,
+                  curve: Curves.easeInOut,
+                )
+                .then(duration: 2.seconds)
+                .moveY(begin: 5, end: -5, curve: Curves.easeInOut),
             const SizedBox(height: 16),
             // Status text
             Text(
-              badge.earned ? 'ACHIEVEMENT UNLOCKED' : 'ACHIEVEMENT LOCKED',
+              'ACHIEVEMENT UNLOCKED',
               style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,

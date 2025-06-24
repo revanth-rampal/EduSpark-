@@ -6,7 +6,8 @@ class BadgeCard extends StatelessWidget {
   final model.Badge badge;
   final VoidCallback onSelect;
 
-  const BadgeCard({Key? key, required this.badge, required this.onSelect}) : super(key: key);
+  const BadgeCard({Key? key, required this.badge, required this.onSelect})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
